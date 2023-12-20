@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import ConnectWalletButton from './components/ConnectWalletButton';
+import FundAccount from './components/FundAccount';
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
         <h1>NFT AutoBidder</h1>
       </header>
       <ConnectWalletButton />
+      <FundAccount />
     </div>
   );
 }
