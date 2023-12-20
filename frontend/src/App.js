@@ -1,11 +1,14 @@
 import React from 'react';
 import './App.css';
+import ConnectWalletButton from './components/ConnectWalletButton';
 
 function App() {
   return (
     <div className="App">
-      <h1>NFT AutoBidder</h1>
-      <button>Connect Wallet</button>
+      <header>
+        <h1>NFT AutoBidder</h1>
+      </header>
+      <ConnectWalletButton />
     </div>
   );
 }
