@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import ConnectWalletButton from './components/ConnectWalletButton';
 import FundAccount from './components/FundAccount';
+import PlaceCollectionBid from './components/PlaceCollectionBid';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       </header>
       <ConnectWalletButton />
       <FundAccount />
+      <PlaceCollectionBid />
     </div>
   );
 }
