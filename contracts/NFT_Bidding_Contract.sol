@@ -45,7 +45,7 @@ contract NFTBiddingContract is BalanceAndAmount {
 
     //bid function
 
-    function placeCollectionBid(address nftContract, uint256 bidPrice) {
+    function placeCollectionBid(address nftContract, uint256 bidPrice) public {
         weth.approve(openseaProxy, bidPrice);
 
         openseaProxy.placeCollectionBid(nftContract, bidPrice);
