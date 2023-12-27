@@ -15,7 +15,7 @@ function WithdrawWeth() {
     return (
         <div className="App">
             <h3>Withdraw WETH from your account</h3>
-            <label for="withdrawal-amount">WETH to withdraw: </label>
+            <label htmlFor="withdrawal-amount">WETH to withdraw: </label>
             <input type='number' id='withdraw-amount' onChange={handleChangeOfAmount}></input>
             <button onClick={withdrawWeth}>Withdraw WETH</button>
         </div>

@@ -1,53 +1,68 @@
-import React, { useEffect } from 'react';
-import { useState } from "react";
-import web3 from 'web3';
+import React, { useState, useEffect } from 'react';
+import Web3 from 'web3';
+import contractAbi from '../conctractABI.json';
 
-const CONTRACT_ABI = process.env.CONTRACT_ABI;
-const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS;
+const CONTRACT_ADDRESS = "0x76A9fEb31e4B81ADDc74737dAF64F6088d6d5eea";
 
 function FundAccount() {
-    const [fundingAmount, setFundingAmount] = useState(0);
-    const [currentAccount, setCurrentAccount] = useState(null);
-    
-    function handleChangeOfAmount(event) {
-        setFundingAmount(event.target.value);
-    }
+  const [fundingAmount, setFundingAmount] = useState(0);
+  const [currentAccount, setCurrentAccount] = useState(null);
+  const [web3, setWeb3] = useState(null);
 
-    useEffect(() => {
-      const handleAccountChange = (accounts) => {
-        setCurrentAccount(accounts[0]);
-      };
+  function handleChangeOfAmount(event) {
+    setFundingAmount(event.target.value);
+  }
 
-      if (window.ethereum) {
-        window.ethereum.on('accountsChanged', handleAccountChange);
-      }
-
-      return () => {
-        if (window.ethereum) {
-          window.ethereum.removeListener('accountsChanged', handleAccountChange);
-        }
-      }
-    }, []);
-
-    async function fundAccount() {
+  useEffect(() => {
+    const initializeWeb3 = async () => {
       try {
-        const accounts = await window.ethereum.request({
-          method: 'eth_requestAccounts',
-        });
+        // Check if the user has MetaMask installed
+        if (window.ethereum) {
+          // Use MetaMask's provider
+          const web3Instance = new Web3(window.ethereum);
+          setWeb3(web3Instance);
 
-        setCurrentAccount(accounts[0]);
-
-        const contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
-        await contract.methods.deposit().send({
-          from: accounts[0],
-          value: web3.utils.toWei(fundingAmount.toString(), 'ether'),
-        });
-
-        console.log(`Transaction successful. Funded account with ${fundingAmount} WETH`);
+          // Request account access
+          const accounts = await window.ethereum.request({
+            method: 'eth_requestAccounts',
+          });
+          setCurrentAccount(accounts[0]);
+        } else {
+          console.log('MetaMask not detected. Please install MetaMask extension.');
+        }
       } catch (error) {
-        console.error('Error funding account:', error);
+        console.error('Error initializing web3:', error);
       }
+    };
+
+    initializeWeb3();
+  }, []);
+
+  async function fundAccount() {
+    try {
+      if (!web3 || !currentAccount) {
+        console.error('Web3 or account not available.');
+        return;
+      }
+
+      // Create a contract instance
+      const contract = new web3.eth.Contract(contractAbi, CONTRACT_ADDRESS);
+
+      // Convert the funding amount to Wei
+      const amountInWei = web3.utils.toWei(fundingAmount.toString(), 'ether');
+
+      // Send a transaction to the 'deposit' function
+      const transaction = await contract.methods.deposit().send({
+        from: currentAccount,
+        value: amountInWei,
+      });
+
+      console.log(`Transaction successful. Funded account with ${fundingAmount} WETH`);
+      console.log('Transaction Hash:', transaction.transactionHash);
+    } catch (error) {
+      console.error('Error funding account:', error);
     }
+  }
 
   return (
     <div className="App">

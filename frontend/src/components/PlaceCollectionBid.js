@@ -27,13 +27,13 @@ function PlaceCollectionBid() {
     <div className="App">
       <h3>Place Bid</h3>
       <form onSubmit={handleSubmit}>
-        <label for="collection-contract">Collection contract address: </label>
+        <label htmlFor="collection-contract">Collection contract address: </label>
         <input type='text' id='collection-contract' onChange={handleContractChange}></input>
         <br/>
-        <label for="max-bid">Max bid in WETH: </label>
+        <label htmlFor="max-bid">Max bid in WETH: </label>
         <input type='number' id='max-bid' onChange={handleChangeMaxBid}></input>
         <br/>
-        <label for="percentage-bid">Max bid in % of collection floor</label>
+        <label htmlFor="percentage-bid">Max bid in % of collection floor</label>
         <input type='number' id='percentage-bid' onChange={handleChangePercentageBid}></input>
         <button>Place bid</button>
       </form>
