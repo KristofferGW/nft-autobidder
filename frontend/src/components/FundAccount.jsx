@@ -1,44 +1,49 @@
 import React, { useState, useEffect } from 'react';
 import Web3 from 'web3';
-import contractAbi from '../conctractABI.json';
+import contractAbi from '../conctractABI.json'
+import {CONTRACT_ADDRESS} from '../utils/contractAddress.js';
 
-const CONTRACT_ADDRESS = "0x76A9fEb31e4B81ADDc74737dAF64F6088d6d5eea";
+// const CONTRACT_ADDRESS = "0x76A9fEb31e4B81ADDc74737dAF64F6088d6d5eea";
 
-function FundAccount() {
+function FundAccount(props) {
   const [fundingAmount, setFundingAmount] = useState(0);
-  const [currentAccount, setCurrentAccount] = useState(null);
-  const [web3, setWeb3] = useState(null);
+  // const [currentAccount, setCurrentAccount] = useState(null);
+  // const [web3, setWeb3] = useState(null);
 
   function handleChangeOfAmount(event) {
     setFundingAmount(event.target.value);
   }
 
-  useEffect(() => {
-    const initializeWeb3 = async () => {
-      try {
-        // Check if the user has MetaMask installed
-        if (window.ethereum) {
-          // Use MetaMask's provider
-          const web3Instance = new Web3(window.ethereum);
-          setWeb3(web3Instance);
+  // useEffect(() => {
+  //   const initializeWeb3 = async () => {
+  //     try {
+  //       // Check if the user has MetaMask installed
+  //       if (window.ethereum) {
+  //         // Use MetaMask's provider
+  //         const web3Instance = new Web3(window.ethereum);
+  //         setWeb3(web3Instance);
 
-          // Request account access
-          const accounts = await window.ethereum.request({
-            method: 'eth_requestAccounts',
-          });
-          setCurrentAccount(accounts[0]);
-        } else {
-          console.log('MetaMask not detected. Please install MetaMask extension.');
-        }
-      } catch (error) {
-        console.error('Error initializing web3:', error);
-      }
-    };
+  //         // Request account access
+  //         const accounts = await window.ethereum.request({
+  //           method: 'eth_requestAccounts',
+  //         });
+  //         setCurrentAccount(accounts[0]);
+  //       } else {
+  //         console.log('MetaMask not detected. Please install MetaMask extension.');
+  //       }
+  //     } catch (error) {
+  //       console.error('Error initializing web3:', error);
+  //     }
+  //   };
 
-    initializeWeb3();
-  }, []);
+  //   initializeWeb3();
+  // }, []);
+
+  const web3 = props.web3;
+  const currentAccount = props.currentAccount;
 
   async function fundAccount() {
+    console.log('web3', web3);
     try {
       if (!web3 || !currentAccount) {
         console.error('Web3 or account not available.');
