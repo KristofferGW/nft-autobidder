@@ -23,13 +23,31 @@ contract NFTBiddingContract is BalanceAndAmount {
 
     event LogError(string reason);
 
+    event UserHasSufficientAllowance(address indexed user);
+
     struct Wallet {
         address owner;
         uint balance;
     }
+
+    function approveWeth(uint amount) public {
+        uint senderBalance = weth.balanceOf(msg.sender);
+        require(amount <= senderBalance, "Not enough WETH balance");
+
+        if (weth.allowance(msg.sender, address(this)) < amount) {
+            weth.approve(address(this), amount);
+        } else {
+            emit UserHasSufficientAllowance(msg.sender);
+        }
+    }
     //deposit function
-    function deposit() public payable {
-        wallets[msg.sender].balance = wallets[msg.sender].balance.add(msg.value);
+    function deposit(uint amount) public {
+        require(weth.allowance(msg.sender, address(this)) >= amount, "Not enough allowance");
+
+        bool success = weth.transferFrom(msg.sender, address(this), amount);
+        require(success, "WETH transfer failed");
+
+        wallets[msg.sender].balance = wallets[msg.sender].balance.add(amount);
     }
 
     //withdraw function
@@ -45,11 +63,11 @@ contract NFTBiddingContract is BalanceAndAmount {
 
     //bid function
 
-    function placeCollectionBid(address nftContract, uint256 bidPrice) public {
-        weth.approve(openseaProxy, bidPrice);
+    // function placeCollectionBid(address nftContract, uint256 bidPrice) public {
+    //     weth.approve(openseaProxy, bidPrice);
 
-        openseaProxy.placeCollectionBid(nftContract, bidPrice);
-    }
+    //     openseaProxy.placeCollectionBid(nftContract, bidPrice);
+    // }
 
     //show balance function
     function showBalance() public view returns(uint) {
