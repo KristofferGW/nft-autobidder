@@ -54,8 +54,9 @@ contract NFTBiddingContract is BalanceAndAmount {
     function withdraw(uint amount) public {
         uint senderBalance = wallets[msg.sender].balance;
         try controller.amountController(amount, senderBalance) {
+            approveWeth(amount);
             wallets[msg.sender].balance = wallets[msg.sender].balance.sub(amount);
-            payable(msg.sender).transfer(amount);
+            weth.transferFrom(address(this), msg.sender, amount);
         } catch Error(string memory reason) {
             emit LogError(reason);
         }
