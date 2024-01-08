@@ -9,6 +9,7 @@ import WithdrawWeth from './components/WithdrawWeth';
 import CheckBalance from './components/CheckBalance';
 import { CONTRACT_ADDRESS } from './utils/contractAddress';
 import newWallet from './utils/newWallet';
+import getNetwork from './utils/network';
 
 function App() {
   const [web3, setWeb3] = useState(null);
@@ -53,7 +54,6 @@ function App() {
       <PlaceCollectionBid />
       <WithdrawWeth />
       <CheckBalance web3={web3} currentAccount={currentAccount} contract={contract} />
-      <button onClick={newWallet}>Create wallet</button>
     </div>
   );
 }
