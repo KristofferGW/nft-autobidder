@@ -6,6 +6,4 @@ const seaportContractAddress = "0x00000000000000ADc04C56Bf30aC9d3c0aAF14dC";
 const seaportName = "Seaport";
 const seaportVersion = "1.5";
 
-console.log(seaportInterface);
-
 module.exports = { seaportInterface, seaportContractAddress, seaportName, seaportVersion}
