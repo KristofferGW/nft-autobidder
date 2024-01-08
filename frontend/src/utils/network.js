@@ -60,3 +60,4 @@ const networks = {
     }
   }
 
+module.exports = {getNetwork}
