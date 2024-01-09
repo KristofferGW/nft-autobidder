@@ -9,4 +9,4 @@ const getWallet = () => {
     return new Wallet(privateKey);
 }
 
-module.exports = getWallet;
+module.exports = {getWallet};
