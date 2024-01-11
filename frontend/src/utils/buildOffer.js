@@ -115,3 +115,65 @@ const getBuildData = async (collectionSlug, quantity) => {
     return response.data.partialParameters
 }
 
+const getCriteriaConsideration = async (
+    criteriaFees,
+    collectionSlug,
+    priceWei,
+  ) => {
+    const fees = [
+      ...criteriaFees,
+      ...(await getCriteriaFees(collectionSlug, priceWei)),
+    ]
+  
+    return fees.filter(fee => fee !== null)
+}
+
+const getSalt = () => {
+  return Math.floor(Math.random() * 100_000).toString()
+}
+
+const buildCollectionOffer = async (offerSpecification) => {
+  const { collectionSlug, quantity, priceWei, expirationSeconds } =
+    offerSpecification
+
+  const now = BigInt(Math.floor(Date.now() / 1000))
+  const startTime = now.toString()
+  const endTime = (now + BigInt(expirationSeconds)).toString()
+  const buildData = await getBuildData(collectionSlug, quantity)
+  const consideration = await getCriteriaConsideration(
+    buildData.consideration,
+    collectionSlug,
+    priceWei,
+  )
+
+  const offer = {
+    offerer: getOfferer(),
+    offer: getOffer(priceWei),
+    consideration,
+    startTime,
+    endTime,
+    orderType: 0,
+    zone: buildData.zone,
+    zoneHash: buildData.zoneHash,
+    salt: getSalt(),
+    conduitKey,
+    totalOriginalConsiderationItems: consideration.length.toString(),
+    counter: 0,
+  }
+
+  return offer
+}
+
+const offerSpecification = {
+  collectionSlug: "azukigoerli",
+  quantity: 5,
+  priceWei: BigInt(5000000000000000), // Replace with your desired price in Wei
+  expirationSeconds: 86400, // Replace with your desired expiration time in seconds
+}
+
+const run = async () => {
+  console.log(await buildCollectionOffer(offerSpecification));
+}
+
+run();
+
