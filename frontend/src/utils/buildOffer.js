@@ -152,7 +152,7 @@ const buildCollectionOffer = async (offerSpecification) => {
     consideration,
     startTime,
     endTime,
-    orderType: 0,
+    orderType: 2,
     zone: buildData.zone,
     zoneHash: buildData.zoneHash,
     salt: getSalt(),
@@ -171,9 +171,5 @@ const offerSpecification = {
   expirationSeconds: 86400, // Replace with your desired expiration time in seconds
 }
 
-const run = async () => {
-  console.log(await buildCollectionOffer(offerSpecification));
-}
-
-run();
+module.exports = { buildCollectionOffer };
 

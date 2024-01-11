@@ -112,3 +112,5 @@ const types = {
     const wallet = getWallet()
     return await wallet._signTypedData(domain, types, offer)
 }
+
+module.exports = { signOffer };

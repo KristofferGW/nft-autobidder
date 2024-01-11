@@ -30,3 +30,5 @@ const postCriteriaOffer = async (collectionSlug, offer, signature) => {
         console.error(error.response.data)
       })
   }
+
+  module.exports = { postCriteriaOffer };
