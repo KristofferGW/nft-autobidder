@@ -27,7 +27,8 @@ const getOffer = (priceWei) => {
 }
 
 const getFee = (priceWei, feeBasisPoints, receipient) => {
-    const fee = (BigInt(priceWei) * BigInt(feeBasisPoints)) / 1000n;
+    const fee = ((BigInt(priceWei) * BigInt(feeBasisPoints)) / 10000n);
+    console.log(fee);
     if (fee <= 0) {
         return null;
     }
@@ -162,13 +163,6 @@ const buildCollectionOffer = async (offerSpecification) => {
   }
 
   return offer
-}
-
-const offerSpecification = {
-  collectionSlug: "azukigoerli",
-  quantity: 5,
-  priceWei: BigInt(5000000000000000), // Replace with your desired price in Wei
-  expirationSeconds: 86400, // Replace with your desired expiration time in seconds
 }
 
 module.exports = { buildCollectionOffer };
