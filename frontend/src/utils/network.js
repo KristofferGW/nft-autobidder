@@ -27,15 +27,15 @@ const networks = {
     //   itemTokenIdentifier: getEnvRequired("MAINNET_ITEM_TOKEN_IDENTIFIER"),
     // },
     testnets: {
-      chainId: 5,
-      chainName: "goerli",
+      chainId: 11155111,
+      chainName: "sepolia",
       baseURL: "https://testnets-api.opensea.io/api/",
-      wethAddress: "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6",
+      wethAddress: "0x7b79995e5f793A07Bc00c21412e50Ecae098E7f9",
       apiKey: undefined,
       rpcUrl:
         process.env.TESTNETS_RPC_URL ||
         "https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
-      network: Chain.Goerli,
+      network: Chain.Sepolia,
       collectionSlug:
         process.env.TESTNETS_COLLECTION_SLUG || "boredapeyachtclub-ehs3xmkzrw",
       itemAssetContractAddress:
