@@ -4,6 +4,7 @@ const { getNetwork } = require('./network');
 const { postCriteriaOffer } = require('./postOffer');
 const { signOffer } = require('./signOffer');
 
+//testing
 const network = getNetwork();
 
 async function main() {
