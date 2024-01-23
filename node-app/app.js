@@ -1,8 +1,10 @@
 const http = require('http');
 const express = require('express');
 const sdk = require('api')('@opensea/v2.0#2cd9im1dlr9rw9li');
+const bodyParser = require('body-parser');
 
 const app = express();
+app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
   sdk.auth('9d2673aea38642219bf60ddfd03e726a');
