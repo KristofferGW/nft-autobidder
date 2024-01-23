@@ -6,31 +6,82 @@ const bodyParser = require('body-parser');
 const app = express();
 app.use(bodyParser.json());
 
-const fetchData = async () => {
+// const fetchData = async (maxBid, minDifference) => {
+//   try {
+//     sdk.auth('9d2673aea38642219bf60ddfd03e726a');
+//     sdk.server('https://api.opensea.io');
+
+//     const floorData = await sdk.get_best_listings_on_collection_v2({ limit: '1', collection_slug: 'insrt-finance' });
+
+//     const topBidData = await sdk.get_collection_offers_v2({ collection_slug: 'insrt-finance' });
+
+//     const combinedData = {
+//       floor: floorData.data.listings[0]?.price,
+//       topBid: topBidData.data.offers[0]?.price
+//     };
+
+//     const userMaxBid = parseFloat(maxBid);
+//     const floorPrice = combinedData.floor;
+//     const topBid = combinedData.topBid;
+//     const difference = floorPrice - topBid;
+
+//     console.log(
+//       'Combined data:', combinedData,
+//       'User max bid', userMaxBid,
+//       'Floor price', floorPrice,
+//       'differece', difference
+//       );
+
+//     setInterval(fetchData, 15 * 60 * 1000);
+//   } catch (error) {
+//     console.error('Error combining data', error);
+//   }
+// };
+
+const fetchData = async (maxBid, minDifference) => {
   try {
     sdk.auth('9d2673aea38642219bf60ddfd03e726a');
     sdk.server('https://api.opensea.io');
 
     const floorData = await sdk.get_best_listings_on_collection_v2({ limit: '1', collection_slug: 'insrt-finance' });
-
     const topBidData = await sdk.get_collection_offers_v2({ collection_slug: 'insrt-finance' });
 
-    const combinedData = {
-      floor: floorData.data.listings[0]?.price,
-      topBid: topBidData.data.offers[0]?.price
-    };
+    // Extracting the 'value' from the nested structure
+    const floorValue = floorData.data.listings[0]?.price?.current?.value;
+    const topBidValue = topBidData.data.offers[0]?.price?.value;
 
-    console.log('Combined data:', combinedData);
+    const userMaxBid = parseFloat(maxBid);
+    const floorPrice = parseFloat(floorValue);
+    const topBid = parseFloat(topBidValue);
+    const difference = floorPrice - topBid;
 
-    setInterval(fetchData, 15 * 60 * 1000);
+    console.log(
+      'Combined data:', { floor: floorValue, topBid: topBidValue },
+      'User max bid', userMaxBid,
+      'Floor price', floorPrice,
+      'Difference', difference
+    );
+
+    if (floorPrice > userMaxBid && userMaxBid > topBid && difference > minDifference) {
+      const bidAmount = topBid + 100000000000000;
+      console.log('A bid will be placed for ', bidAmount);
+    } else {
+      console.log('No bid will be placed');
+    }
+
+    setInterval(() => fetchData(maxBid, minDifference), 15 * 60 * 1000);
   } catch (error) {
     console.error('Error combining data', error);
   }
 };
 
+
 app.get('/combined-data', (req, res) => {
   try {
-    fetchData();
+    const maxBid = req.query.maxBid || 0;
+    const minDifference = req.query.minDifference || 0;
+
+    fetchData(maxBid, minDifference);
     res.send('Data will be fetched and combined every 15 minutes');
   } catch (error) {
     console.error('Error in /combined-data endpoint', error);
