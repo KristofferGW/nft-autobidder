@@ -14,7 +14,6 @@ const fetchData = async (maxBid, minDifference) => {
     const floorData = await sdk.get_best_listings_on_collection_v2({ limit: '1', collection_slug: 'insrt-finance' });
     const topBidData = await sdk.get_collection_offers_v2({ collection_slug: 'insrt-finance' });
 
-    // Extracting the 'value' from the nested structure
     const floorValue = floorData.data.listings[0]?.price?.current?.value;
     const topBidValue = topBidData.data.offers[0]?.price?.value;
 
