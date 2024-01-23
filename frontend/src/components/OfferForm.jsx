@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const OfferForm = () => {
   const [formData, setFormData] = useState({
@@ -13,10 +14,16 @@ const OfferForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Do something with the form data, like sending it to an API
     console.log(formData);
+    try {
+      await axios.post('http://localhost:3000/submit', formData);
+      console.log('Form data sent successfully!');
+    } catch (error) {
+      console.error('Error sending form data:', error);
+    }
   };
 
   return (
