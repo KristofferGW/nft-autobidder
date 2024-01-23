@@ -6,6 +6,38 @@ const bodyParser = require('body-parser');
 const app = express();
 app.use(bodyParser.json());
 
+const fetchData = async () => {
+  try {
+    sdk.auth('9d2673aea38642219bf60ddfd03e726a');
+    sdk.server('https://api.opensea.io');
+
+    const floorData = await sdk.get_best_listings_on_collection_v2({ limit: '1', collection_slug: 'insrt-finance' });
+
+    const topBidData = await sdk.get_collection_offers_v2({ collection_slug: 'insrt-finance' });
+
+    const combinedData = {
+      floor: floorData.data.listings[0]?.price,
+      topBid: topBidData.data.offers[0]?.price
+    };
+
+    console.log('Combined data:', combinedData);
+
+    setInterval(fetchData, 15 * 60 * 1000);
+  } catch (error) {
+    console.error('Error combining data', error);
+  }
+};
+
+app.get('/combined-data', (req, res) => {
+  try {
+    fetchData();
+    res.send('Data will be fetched and combined every 15 minutes');
+  } catch (error) {
+    console.error('Error in /combined-data endpoint', error);
+    res.status(500).send('Internal server error');
+  }
+});
+
 app.get('/floor', (req, res) => {
   sdk.auth('9d2673aea38642219bf60ddfd03e726a');
   sdk.server('https://api.opensea.io');
