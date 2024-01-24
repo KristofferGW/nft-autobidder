@@ -8,15 +8,15 @@ const network = getNetwork();
 async function main(collectionSlug) {
   console.log("collection slug from main function", collectionSlug);
     const collectionOffer = await buildCollectionOffer({
-      collectionSlug: network.collectionSlug,
+      collectionSlug: collectionSlug,
       quantity: 1,
       priceWei: BigInt("3000000000000000"),
       expirationSeconds: BigInt(901),
     })
-    console.log('collectionOffer from main', collectionOffer);
+
     const collectionSignature = await signOffer(collectionOffer)
     const collectionResponse = await postCriteriaOffer(
-      network.collectionSlug,
+      collectionSlug,
       collectionOffer,
       collectionSignature,
     )
