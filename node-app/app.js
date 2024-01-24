@@ -1,10 +1,19 @@
+// require('./bidding_bot/config');
+require('dotenv').config({ path: './.env' });
 const http = require('http');
 const express = require('express');
 const sdk = require('api')('@opensea/v2.0#2cd9im1dlr9rw9li');
 const bodyParser = require('body-parser');
+const { main } = require('./bidding_bot/biddingBot');
 
 const app = express();
 app.use(bodyParser.json());
+
+console.log('NETWORK:', process.env.NETWORK);
+console.log('TESTNETS_RPC_URL:', process.env.TESTNETS_RPC_URL);
+console.log('TESTNETS_COLLECTION_SLUG:', process.env.TESTNETS_COLLECTION_SLUG);
+console.log('WALLET_PRIVATE_KEY:', process.env.WALLET_PRIVATE_KEY);
+console.log('GOERLI_INFURA_API_KEY:', process.env.GOERLI_INFURA_API_KEY);
 
 const fetchData = async (maxBid, minDifference) => {
   try {
@@ -32,6 +41,7 @@ const fetchData = async (maxBid, minDifference) => {
     if (floorPrice > userMaxBid && userMaxBid > topBid && difference > minDifference) {
       const bidAmount = topBid + 100000000000000;
       console.log('A bid will be placed for ', bidAmount);
+      await main().catch(error => console.error(error));
     } else {
       console.log('No bid will be placed');
     }
