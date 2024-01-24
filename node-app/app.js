@@ -10,24 +10,18 @@ const { clearInterval } = require('timers');
 const app = express();
 app.use(bodyParser.json());
 
-console.log('NETWORK:', process.env.NETWORK);
-console.log('TESTNETS_RPC_URL:', process.env.TESTNETS_RPC_URL);
-console.log('TESTNETS_COLLECTION_SLUG:', process.env.TESTNETS_COLLECTION_SLUG);
-console.log('WALLET_PRIVATE_KEY:', process.env.WALLET_PRIVATE_KEY);
-console.log('GOERLI_INFURA_API_KEY:', process.env.GOERLI_INFURA_API_KEY);
-
 let fetchInterval = null;
 
-const fetchData = async (maxBid, minDifference) => {
-  console.log('fetchData was called');
+const fetchData = async (maxBid, minDifference, collectionSlug) => {
   clearInterval(fetchInterval);
   fetchInterval = null;
   try {
     sdk.auth('9d2673aea38642219bf60ddfd03e726a');
     sdk.server('https://api.opensea.io');
 
-    const floorData = await sdk.get_best_listings_on_collection_v2({ limit: '1', collection_slug: 'insrt-finance' });
-    const topBidData = await sdk.get_collection_offers_v2({ collection_slug: 'insrt-finance' });
+    const floorData = await sdk.get_best_listings_on_collection_v2({ limit: '1', collection_slug: collectionSlug });
+    const topBidData = await sdk.get_collection_offers_v2({ collection_slug: collectionSlug });
+    console.log("topBidData", topBidData);
 
     const floorValue = floorData.data.listings[0]?.price?.current?.value;
     const topBidValue = topBidData.data.offers[0]?.price?.value;
@@ -47,7 +41,7 @@ const fetchData = async (maxBid, minDifference) => {
     if (floorPrice > userMaxBid && userMaxBid > topBid && difference > minDifference) {
       const bidAmount = topBid + 100000000000000;
       console.log('A bid will be placed for ', bidAmount);
-      await main().catch(error => console.error(error));
+      await main(collectionSlug).catch(error => console.error(error));
     } else {
       console.log('No bid will be placed');
     }
@@ -63,8 +57,9 @@ app.get('/combined-data', (req, res) => {
   try {
     const maxBid = req.query.maxBid || 0;
     const minDifference = req.query.minDifference || 0;
+    const collectionSlug = req.query.collectionSlug;
 
-    fetchData(maxBid, minDifference);
+    fetchData(maxBid, minDifference, collectionSlug);
     res.send('Data will be fetched and combined every 15 minutes');
   } catch (error) {
     console.error('Error in /combined-data endpoint', error);

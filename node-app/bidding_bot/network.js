@@ -12,20 +12,20 @@ const getEnvRequired = (key) => {
 }
 
 const networks = {
-    // mainnet: {
-    //   chainId: 1,
-    //   chainName: "ethereum",
-    //   baseURL: "https://api.opensea.io/api/",
-    //   wethAddress: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
-    //   apiKey: getEnvRequired("API_KEY"),
-    //   rpcUrl: getEnvRequired("MAINNET_RPC_URL"),
-    //   network: Chain.Mainnet,
-    //   collectionSlug: getEnvRequired("MAINNET_COLLECTION_SLUG"),
-    //   itemAssetContractAddress: getEnvRequired(
-    //     "MAINNET_ITEM_ASSET_CONTRACT_ADDRESS",
-    //   ),
-    //   itemTokenIdentifier: getEnvRequired("MAINNET_ITEM_TOKEN_IDENTIFIER"),
-    // },
+    mainnet: {
+      chainId: 1,
+      chainName: "ethereum",
+      baseURL: "https://api.opensea.io/api/",
+      wethAddress: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+      apiKey: getEnvRequired("API_KEY"),
+      rpcUrl: getEnvRequired("MAINNET_RPC_URL"),
+      network: Chain.Mainnet,
+      collectionSlug: getEnvRequired("MAINNET_COLLECTION_SLUG"),
+      itemAssetContractAddress: getEnvRequired(
+        "MAINNET_ITEM_ASSET_CONTRACT_ADDRESS",
+      ),
+      itemTokenIdentifier: getEnvRequired("MAINNET_ITEM_TOKEN_IDENTIFIER"),
+    },
     testnets: {
       chainId: 11155111,
       chainName: "sepolia",
