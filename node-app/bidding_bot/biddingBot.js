@@ -1,10 +1,8 @@
-require('./config');
 const { buildCollectionOffer } = require('./buildOffer');
 const { getNetwork } = require('./network');
 const { postCriteriaOffer } = require('./postOffer');
 const { signOffer } = require('./signOffer');
 
-//testing
 const network = getNetwork();
 
 async function main() {
@@ -26,3 +24,5 @@ async function main() {
   }
 
   main().catch(error => console.error(error));
+
+  module.exports = { main };
