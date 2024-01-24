@@ -5,6 +5,7 @@ const express = require('express');
 const sdk = require('api')('@opensea/v2.0#2cd9im1dlr9rw9li');
 const bodyParser = require('body-parser');
 const { main } = require('./bidding_bot/biddingBot');
+const { clearInterval } = require('timers');
 
 const app = express();
 app.use(bodyParser.json());
@@ -15,7 +16,12 @@ console.log('TESTNETS_COLLECTION_SLUG:', process.env.TESTNETS_COLLECTION_SLUG);
 console.log('WALLET_PRIVATE_KEY:', process.env.WALLET_PRIVATE_KEY);
 console.log('GOERLI_INFURA_API_KEY:', process.env.GOERLI_INFURA_API_KEY);
 
+let fetchInterval = null;
+
 const fetchData = async (maxBid, minDifference) => {
+  console.log('fetchData was called');
+  clearInterval(fetchInterval);
+  fetchInterval = null;
   try {
     sdk.auth('9d2673aea38642219bf60ddfd03e726a');
     sdk.server('https://api.opensea.io');
@@ -46,7 +52,7 @@ const fetchData = async (maxBid, minDifference) => {
       console.log('No bid will be placed');
     }
 
-    setInterval(() => fetchData(maxBid, minDifference), 15 * 60 * 1000);
+    fetchInterval = setInterval(() => fetchData(maxBid, minDifference), 15 * 1000);
   } catch (error) {
     console.error('Error combining data', error);
   }
@@ -81,6 +87,15 @@ app.get('/top-bid', (req, res) => {
   sdk.get_collection_offers_v2({collection_slug: 'insrt-finance'})
     .then(({ data }) => res.send(data))
     .catch(err => res.status(500).send(err));
+});
+
+app.get('/stop-bot', (req, res) => {
+  console.log('Before clearing interval:', fetchInterval);
+  clearInterval(fetchInterval);
+  fetchInterval = null;
+  console.log('After clearing interval:', fetchInterval);
+
+  res.send('The bot was stopped');
 });
 
 const server = http.createServer(app);
