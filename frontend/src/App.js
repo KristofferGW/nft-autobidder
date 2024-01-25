@@ -1,23 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
+import BotForm from './components/BotForm';
 
 function App() {
-  const startBot = async () => {
-    try {
-      const response = await fetch('http://localhost:3000/combined-data?maxBid=5000000000000000&minDifference=1&collectionSlug=official-skulourful');
-      const data = await response.text();
-      console.log(data);
-    } catch (error) {
-      console.error('Error starting bot', error);
-    }
-  };
 
   return (
     <AppContainer>
       <Header>
         <Title>NFT AutoBidder</Title>
-        <Description>There will be a form here soon to fill in details</Description>
-        <ActionButton onClick={startBot}>Start bot</ActionButton>
+        <BotForm />
       </Header>
     </AppContainer>
   );
@@ -41,23 +32,6 @@ const Header = styled.header`
 
 const Title = styled.h1`
   margin: 0;
-`;
-
-const Description = styled.p`
-  margin: 10px 0;
-`;
-
-const ActionButton = styled.button`
-  background-color: #61dafb;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-
-  &:hover {
-    background-color: #4fa3d1;
-  }
 `;
 
 
