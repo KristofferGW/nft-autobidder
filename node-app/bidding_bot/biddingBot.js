@@ -5,14 +5,17 @@ const { signOffer } = require('./signOffer');
 
 const network = getNetwork();
 
-async function main(collectionSlug) {
-  console.log("collection slug from main function", collectionSlug);
+async function main(collectionSlug, bidAmount) {
+    console.log('Bid amount as is', bidAmount);
+    const bidAmountBigInt = BigInt(bidAmount);
+    console.log('Bid amount bigint', bidAmountBigInt);
     const collectionOffer = await buildCollectionOffer({
       collectionSlug: collectionSlug,
       quantity: 1,
-      priceWei: BigInt("3000000000000000"),
+      priceWei: BigInt(bidAmount),
       expirationSeconds: BigInt(901),
     })
+    console.log('Collection offer', collectionOffer);
 
     const collectionSignature = await signOffer(collectionOffer)
     const collectionResponse = await postCriteriaOffer(
