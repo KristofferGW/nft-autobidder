@@ -21,18 +21,23 @@ const fetchData = async (maxBid, minDifference, collectionSlug) => {
 
     const floorData = await sdk.get_best_listings_on_collection_v2({ limit: '1', collection_slug: collectionSlug });
     const topBidData = await sdk.get_collection_offers_v2({ collection_slug: collectionSlug });
-    console.log("topBidData", topBidData);
 
     const floorValue = floorData.data.listings[0]?.price?.current?.value;
     const topBidValue = topBidData.data.offers[0]?.price?.value;
 
+    console.log('topBidValue', topBidValue);
+
     const userMaxBid = parseFloat(maxBid);
     const floorPrice = parseFloat(floorValue);
-    const topBid = parseFloat(topBidValue);
+    let topBid = 0;
+    if(topBidValue) {
+      topBid = parseFloat(topBidValue);
+    }
     const difference = floorPrice - topBid;
+    console.log('topBid before if', topBid);
 
     console.log(
-      'Combined data:', { floor: floorValue, topBid: topBidValue },
+      'Combined data:', { floor: floorValue, topBid: topBid },
       'User max bid', userMaxBid,
       'Floor price', floorPrice,
       'Difference', difference
@@ -41,7 +46,7 @@ const fetchData = async (maxBid, minDifference, collectionSlug) => {
     if (floorPrice > userMaxBid && userMaxBid > topBid && difference > minDifference) {
       const bidAmount = topBid + 100000000000000;
       console.log('A bid will be placed for ', bidAmount);
-      await main(collectionSlug).catch(error => console.error(error));
+      await main(collectionSlug, bidAmount).catch(error => console.error(error));
     } else {
       console.log('No bid will be placed');
     }
