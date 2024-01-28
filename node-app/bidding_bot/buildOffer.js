@@ -27,23 +27,11 @@ const getOffer = (priceWei) => {
 }
 
 const getFee = (priceWei, feeBasisPoints, receipient) => {
-    console.log('receipient from getFee', receipient);
     const fee = ((BigInt(priceWei) * BigInt(feeBasisPoints)) / 10000n);
-    console.log(fee);
     if (fee <= 0) {
         return null;
     }
 
-    console.log('results from getFee',
-      {
-        itemType: 1, // ERC 20
-        token: network.wethAddress,
-        identifierOrCriteria: 0,
-        startAmount: fee.toString(),
-        endAmount: fee.toString(),
-        recipient: receipient,
-    }
-    )
     return {
         itemType: 1, // ERC 20
         token: network.wethAddress,
@@ -86,22 +74,16 @@ const getFee = (priceWei, feeBasisPoints, receipient) => {
 
 function extractFeesApi(feesObject, priceWei) {
   const fees = [];
-  console.log('feesObject from extractFeesApi', feesObject);
 
   for (const category in feesObject) {
       if (feesObject.hasOwnProperty(category)) {
           const categoryFees = feesObject[category];
-          console.log('categoryFees inside category loop', categoryFees);
 
           for (const recipient in categoryFees) {
               if (categoryFees.hasOwnProperty(recipient)) {
                   const basisPoints = 250;
-
-                  console.log('address before getFee:', recipient);
-                  console.log('categoryFees.recipient in loop', categoryFees.recipient);
                   
                   const fee = getFee(priceWei, BigInt(basisPoints), categoryFees.recipient);
-                  console.log('fee inside loop in extractFeesApi');
 
                   if (fee) {
                       fees.push(fee);
@@ -111,7 +93,6 @@ function extractFeesApi(feesObject, priceWei) {
       }
   }
 
-  console.log("fees after extractFeesApi is done",fees)
   return fees;
 }
 
@@ -205,9 +186,6 @@ const getCriteriaConsideration = async (
   // Convert the Map values back to an array
   const uniqueFees = Array.from(uniqueFeesMap.values());
 
-  console.log('fees unfiltered from getCriteriaConsideration', allFees);
-  console.log('filtered fees from getCriteriaConsideration', uniqueFees);
-
   return uniqueFees;
 };
 
@@ -218,7 +196,6 @@ const getSalt = () => {
 }
 
 const buildCollectionOffer = async (offerSpecification) => {
-  console.log('We get into buildCollectionOffer!');
   const { collectionSlug, quantity, priceWei, expirationSeconds } =
     offerSpecification
 
@@ -226,14 +203,11 @@ const buildCollectionOffer = async (offerSpecification) => {
   const startTime = now.toString()
   const endTime = (now + BigInt(expirationSeconds)).toString()
   const buildData = await getBuildData(collectionSlug, quantity)
-  console.log('buildData consideration from buildCollectionOffer', buildData.consideration);
   const consideration = await getCriteriaConsideration(
     buildData.consideration,
     collectionSlug,
     priceWei,
-  )
-
-  console.log('CONSIDERTION FROM BUILD COLLECTION OFFER', consideration);
+  );
 
   const offer = {
     offerer: getOfferer(),
