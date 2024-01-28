@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import BotForm from './components/BotForm';
-import BotStatus from './components/BotStatus';
 
 function App() {
   const [isBotRunning, setIsBotRunning] = useState(false);
@@ -10,8 +9,8 @@ function App() {
     <AppContainer>
       <Header>
         <Title>NFT AutoBidder</Title>
-        <BotForm setIsBotRunning={setIsBotRunning}/>
-        <BotStatus isBotRunning={isBotRunning} />
+        <BotForm setIsBotRunning={setIsBotRunning} isBotRunning={isBotRunning} />
+        {/* <BotStatus isBotRunning={isBotRunning} /> */}
       </Header>
     </AppContainer>
   );
