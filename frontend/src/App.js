@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import BotForm from './components/BotForm';
+import BotStatus from './components/BotStatus';
 
 function App() {
+  const [isBotRunning, setIsBotRunning] = useState(false);
 
   return (
     <AppContainer>
       <Header>
         <Title>NFT AutoBidder</Title>
-        <BotForm />
+        <BotForm setIsBotRunning={setIsBotRunning}/>
+        <BotStatus isBotRunning={isBotRunning} />
       </Header>
     </AppContainer>
   );
