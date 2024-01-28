@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-const BotForm = () => {
+const BotForm = ({ setIsBotRunning }) => {
   const [maxBid, setMaxBid] = useState(0);
   const [minDifference, setMinDifference] = useState(0);
   const [collectionSlug, setCollectionSlug] = useState('');
@@ -12,8 +12,10 @@ const BotForm = () => {
       const response = await fetch(apiUrl);
       const data = await response.text();
       console.log(data);
+      setIsBotRunning(true);
     } catch (error) {
       console.error('Error starting bot', error);
+      setIsBotRunning(false);
     }
   };
   
