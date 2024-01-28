@@ -6,8 +6,10 @@ const sdk = require('api')('@opensea/v2.0#2cd9im1dlr9rw9li');
 const bodyParser = require('body-parser');
 const { main } = require('./bidding_bot/biddingBot');
 const { clearInterval } = require('timers');
+const cors = require('cors');
 
 const app = express();
+app.use(cors());
 app.use(bodyParser.json());
 
 let fetchInterval = null;
@@ -24,8 +26,6 @@ const fetchData = async (maxBid, minDifference, collectionSlug) => {
 
     const floorValue = floorData.data.listings[0]?.price?.current?.value;
     const topBidValue = topBidData.data.offers[0]?.price?.value;
-
-    console.log('topBidValue', topBidValue);
 
     const userMaxBid = parseFloat(maxBid);
     const floorPrice = parseFloat(floorValue);
@@ -51,7 +51,7 @@ const fetchData = async (maxBid, minDifference, collectionSlug) => {
       console.log('No bid will be placed');
     }
 
-    fetchInterval = setInterval(() => fetchData(maxBid, minDifference), 15 * 1000);
+    fetchInterval = setInterval(() => fetchData(maxBid, minDifference, collectionSlug), 15 * 1000);
   } catch (error) {
     console.error('Error combining data', error);
   }
@@ -90,10 +90,8 @@ app.get('/combined-data', (req, res) => {
 // });
 
 app.get('/stop-bot', (req, res) => {
-  console.log('Before clearing interval:', fetchInterval);
   clearInterval(fetchInterval);
   fetchInterval = null;
-  console.log('After clearing interval:', fetchInterval);
 
   res.send('The bot was stopped');
 });
