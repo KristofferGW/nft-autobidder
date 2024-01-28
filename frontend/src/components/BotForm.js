@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-const BotForm = ({ setIsBotRunning }) => {
+const BotForm = ({ setIsBotRunning, isBotRunning }) => {
   const [maxBid, setMaxBid] = useState(0);
   const [minDifference, setMinDifference] = useState(0);
   const [collectionSlug, setCollectionSlug] = useState('');
@@ -27,6 +27,18 @@ const BotForm = ({ setIsBotRunning }) => {
     startBot(maxBidWei, minDifferenceWei, collectionSlug);
   };
 
+  const stopBot = async () => {
+    try {
+      const stopBotUrl = 'http://localhost:3000/stop-bot';
+      const response = await fetch(stopBotUrl);
+      const result = await response.text();
+      console.log(result);
+      setIsBotRunning(false);
+    } catch (error) {
+      console.error('Error stopping bot', error);
+    }
+  };
+
   return (
     <FormContainer>
       <InputLabel>
@@ -49,7 +61,19 @@ const BotForm = ({ setIsBotRunning }) => {
           onChange={(e) => setCollectionSlug(e.target.value)}
         />
       </InputLabel>
-      <StartButton onClick={handleStartBot}>Start bot</StartButton>
+      <StatusContainer>
+            {isBotRunning ? (
+              <div>
+                <RunningStatus>Bot is running</RunningStatus>
+                <Button onClick={stopBot}>Stop bot</Button>
+              </div>
+            ) : (
+              <div>
+                <Button onClick={handleStartBot}>Start bot</Button>
+                <StoppedStatus>Bot is waiting for you to press "Start bot"</StoppedStatus>
+              </div>
+            )}
+        </StatusContainer>
     </FormContainer>
   );
 };
@@ -73,7 +97,7 @@ const InputField = styled.input`
   font-size: 16px;
 `;
 
-const StartButton = styled.button`
+const Button = styled.button`
   background-color: #61dafb;
   color: white;
   padding: 10px 20px;
@@ -85,6 +109,18 @@ const StartButton = styled.button`
   &:hover {
     background-color: #4fa3d1;
   }
+`;
+
+const StatusContainer = styled.div`
+    margin-top: 20px;
+`;
+
+const RunningStatus = styled.p`
+    color: green;
+`;
+
+const StoppedStatus = styled.p`
+    color: red;
 `;
 
 export default BotForm;
