@@ -24,7 +24,7 @@ const ConnectWalletButton = ({ onConnect }) => {
     });
 
     return () => {
-      window.ethereum.removeAllListiners('accountsChanged')
+      window.ethereum.removeAllListeners('accountsChanged')
     }
   }, []);
 
