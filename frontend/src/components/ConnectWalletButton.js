@@ -6,19 +6,27 @@ const ConnectWalletButton = ({ onConnect }) => {
   const [account, setAccount] = useState('');
 
   useEffect(() => {
-    const checkMetaMask = async () => {
-      if (window.ethereum) {
-        try {
-          const web3 = new Web3(window.ethereum);
-          const accounts = await web3.eth.requestAccounts();
-          setAccount(accounts[0] || '');
-        } catch (error) {
-          console.error('Error connecting to MetaMask:', error);
-        }
+    const checkWallet = async () => {
+      try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+  
+        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+  
+        setAccount(accounts[0] || '');
+      } catch (error) {
+        console.error('Error connecting to wallet from checkWallet function', error);
       }
     };
 
-    checkMetaMask();
+    checkWallet();
+
+    window.ethereum.on('accountsChanged', (newAccounts) => {
+      setAccount(newAccounts[0] || '');
+    });
+
+    return () => {
+      window.ethereum.removeAllListiners('accountsChanged');
+    }
   }, []);
 
   return (
