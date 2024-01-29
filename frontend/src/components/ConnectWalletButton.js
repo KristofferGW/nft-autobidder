@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import Web3 from 'web3';
 
 const ConnectWalletButton = ({ onConnect }) => {
   const [account, setAccount] = useState('');
@@ -25,7 +24,7 @@ const ConnectWalletButton = ({ onConnect }) => {
     });
 
     return () => {
-      window.ethereum.removeAllListiners('accountsChanged');
+      window.ethereum.removeAllListiners('accountsChanged')
     }
   }, []);
 
