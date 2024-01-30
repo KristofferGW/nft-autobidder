@@ -5,13 +5,15 @@ import ConnectWalletButton from './components/ConnectWalletButton';
 
 function App() {
   const [isBotRunning, setIsBotRunning] = useState(false);
+  const [holdsNft, setHoldsNft] = useState(false);
+  console.log('holdsNft state',holdsNft);
 
   return (
     <AppContainer>
       <Header>
         <Title>NFT AutoBidder</Title>
-        <ConnectWalletButton />
-        <BotForm setIsBotRunning={setIsBotRunning} isBotRunning={isBotRunning} />
+        <ConnectWalletButton setHoldsNft={setHoldsNft} />
+        {holdsNft && <BotForm setIsBotRunning={setIsBotRunning} isBotRunning={isBotRunning} />}
         {/* <BotStatus isBotRunning={isBotRunning} /> */}
       </Header>
     </AppContainer>

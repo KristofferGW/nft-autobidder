@@ -1,17 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import checkNFTownership from '../functions/nftChecker';
 
-const ConnectWalletButton = ({ onConnect }) => {
+const ConnectWalletButton = ({ onConnect, setHoldsNft }) => {
   const [account, setAccount] = useState('');
 
   useEffect(() => {
     const checkWallet = async () => {
       try {
         await window.ethereum.request({ method: 'eth_requestAccounts' });
-  
+
         const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-  
         setAccount(accounts[0] || '');
+
+        const accessGranted = await checkNFTownership(accounts[0]);
+
+        if (accessGranted) {
+          setHoldsNft(true);
+        } else {
+          setHoldsNft(false);
+        }
       } catch (error) {
         console.error('Error connecting to wallet from checkWallet function', error);
       }
@@ -19,14 +27,22 @@ const ConnectWalletButton = ({ onConnect }) => {
 
     checkWallet();
 
-    window.ethereum.on('accountsChanged', (newAccounts) => {
+    window.ethereum.on('accountsChanged', async (newAccounts) => {
       setAccount(newAccounts[0] || '');
+
+      const accessGranted = await checkNFTownership(newAccounts[0]);
+
+      if (accessGranted) {
+        setHoldsNft(true);
+      } else {
+        setHoldsNft(false);
+      }
     });
 
     return () => {
-      window.ethereum.removeAllListeners('accountsChanged')
-    }
-  }, []);
+      window.ethereum.removeAllListeners('accountsChanged');
+    };
+  }, [setHoldsNft]);
 
   return (
     <ConnectWalletContainer>
