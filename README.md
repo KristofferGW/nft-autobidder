@@ -13,7 +13,7 @@ Clone this repository locally to your computer.
 Deploy the NFT-contract in contracts folder to the Sepolia network.
 
 ### Step 3:
-Replace the contract address in nftChecker.js with the contract address of your deployed NFT-contract.
+Replace the text YOUR-CONTRACT-ADDRESS in nftChecker.js with the contract address of your deployed NFT-contract. Replace the text YOUR-SEPOLIA-PROVIDER-URL with your own Sepolia provider URL. You can get this from Alchemy.com.
 
 ### Step 4:
 Mint an NFT from the collection you deployed to the address you want to use with the bot.
@@ -22,9 +22,15 @@ Mint an NFT from the collection you deployed to the address you want to use with
 Change directory to the frontend folder and install all dependencis by running "npm install" in the terminal. Change directory to node-app and install all dependencies for the backend as well.
 
 ### Step 6:
-Get an API-key from OpenSea and paste it in node-app/app.js on line 20.
+Get an API-key from OpenSea and paste it in node-app/app.js on where it says YOUR-OPENSEA-API-KEY.
+
+### Step 7:
+Paste the private key of the wallet you want to use with the bot in the .env file. The private key should not be shared with anyone or published online!
 
 ## Usage
+
+### Before you start
+In order to use the bot you will need WETH in your wallet. You will also need to approve OpenSea to spend your WETH, which you can do from the OpenSea frontend.
 
 ### Start the server and frontend
 When in the node-app folder, run the command "node app.js" to start the server. Change to the frontend folder and run the command "npm start" to start the frontend.
@@ -36,7 +42,7 @@ https://opensea.io/collection/beanzofficial
 
 The collection slug would be "beanzofficial".
 
-Then enter your max bid in ether and the minimum difference to the floor price you want from your max bid.
+Then enter your max bid in ether and the minimum difference to the floor price you want from your max bid, also in ether.
 
 Click "Start bot".
 
