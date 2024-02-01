@@ -1,4 +1,3 @@
-// import { Chain } from "opensea-js/lib/types";
 require('./config');
 const { Chain } = require('opensea-js/lib/types');
 

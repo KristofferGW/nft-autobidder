@@ -1,4 +1,3 @@
-// require('./bidding_bot/config');
 require('dotenv').config({ path: './.env' });
 const http = require('http');
 const express = require('express');
@@ -34,7 +33,6 @@ const fetchData = async (maxBid, minDifference, collectionSlug) => {
       topBid = parseFloat(topBidValue);
     }
     const difference = floorPrice - topBid;
-    console.log('topBid before if', topBid);
 
     console.log(
       'Combined data:', { floor: floorValue, topBid: topBid },
@@ -71,23 +69,6 @@ app.get('/combined-data', (req, res) => {
     res.status(500).send('Internal server error');
   }
 });
-
-// app.get('/floor', (req, res) => {
-//   sdk.auth('9d2673aea38642219bf60ddfd03e726a');
-//   sdk.server('https://api.opensea.io');
-  
-//   sdk.get_best_listings_on_collection_v2({ limit: '1', collection_slug: 'insrt-finance' })
-//     .then(({ data }) => res.send(data))
-//     .catch(err => res.status(500).send(err));
-// });
-
-// app.get('/top-bid', (req, res) => {
-//   sdk.auth('9d2673aea38642219bf60ddfd03e726a');
-//   sdk.server('https://api.opensea.io');
-//   sdk.get_collection_offers_v2({collection_slug: 'insrt-finance'})
-//     .then(({ data }) => res.send(data))
-//     .catch(err => res.status(500).send(err));
-// });
 
 app.get('/stop-bot', (req, res) => {
   clearInterval(fetchInterval);
