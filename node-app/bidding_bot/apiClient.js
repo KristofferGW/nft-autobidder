@@ -1,6 +1,5 @@
 require('./config');
 const axios = require("axios");
-// const axiosRetry = require("axios-retry");
 const { ethers } = require("ethers");
 const { OpenSeaSDK } = require("opensea-js");
 const { getNetwork } = require("./network");
@@ -20,18 +19,6 @@ const client = axios.create({
     baseURL: network.baseURL,
     headers,
 });
-
-// axiosRetry(client, {
-//     retryCondition: function(error) {
-//         return error.response && error.response.status === 429;
-//     },
-//     retryDelay: function(retryCount, error) {
-//         if (error.response && error.response.headers["retry-after"]) {
-//             return parseInt(error.response.headers["retry-after"]) * 1000;
-//         }
-//         return retryCount * 1000;
-//     },
-// });
 
 const apiClient = client;
 

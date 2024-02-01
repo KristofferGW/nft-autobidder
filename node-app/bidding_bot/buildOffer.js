@@ -17,7 +17,7 @@ const getOfferer = () => {
 const getOffer = (priceWei) => {
     return [
         {
-            itemType: 1, // ERC20,
+            itemType: 1,
             token: network.wethAddress,
             identifierOrCriteria: 0,
             startAmount: priceWei.toString(),
@@ -33,7 +33,7 @@ const getFee = (priceWei, feeBasisPoints, receipient) => {
     }
 
     return {
-        itemType: 1, // ERC 20
+        itemType: 1,
         token: network.wethAddress,
         identifierOrCriteria: 0,
         startAmount: fee.toString(),
@@ -42,37 +42,7 @@ const getFee = (priceWei, feeBasisPoints, receipient) => {
     }
 }
 
-// function extractFeesApi(feesObject, priceWei) {
-//     const fees = [];
-//     console.log('feesObject from extractFeesApi', feesObject);
-
-//     for (const category in feesObject) {
-//         if (feesObject.hasOwnProperty(category)) {
-//             const categoryFees = feesObject[category];
-//             console.log('categoryFees inside category loop', categoryFees);
-
-//             for (const address in categoryFees) {
-//                 if (categoryFees.hasOwnProperty(address)) {
-//                     const basisPoints = 250;
-
-//                     console.log('address before getFee:', address);
-
-//                     const fee = getFee(priceWei, BigInt(basisPoints), address);
-//                     console.log('fee inside loop in extractFeesApi');
-
-//                     if (fee) {
-//                         fees.push(fee);
-//                     }
-//                 }
-//             }
-//         }
-//     }
-
-//     console.log("fees after extractFeesApi is done",fees)
-//     return fees;
-// }
-
-function extractFeesApi(feesObject, priceWei) {
+const extractFeesApi =(feesObject, priceWei) => {
   const fees = [];
 
   for (const category in feesObject) {
@@ -110,19 +80,19 @@ const extractFeesSdk = (feesObject, priceWei) => {
     return fees
 }
 
-// Unsure if getItemFees is needed. Debug if it is indeed needed.
-const getItemFees = async (assetContractAddress, tokenId, priceWei) => {
-    const response = await sdkClient.api.getNFT(
-      Chain.Goerli,
-      assetContractAddress,
-      tokenId,
-    )
+// // Unsure if getItemFees is needed. Debug if it is indeed needed.
+// const getItemFees = async (assetContractAddress, tokenId, priceWei) => {
+//     const response = await sdkClient.api.getNFT(
+//       Chain.Goerli,
+//       assetContractAddress,
+//       tokenId,
+//     )
   
-    const collectionSlug = response.nft.collection
-    const collection = await sdkClient.api.getCollection(collectionSlug)
-    const fees = collection.fees
-    return extractFeesSdk(fees, priceWei)
-}
+//     const collectionSlug = response.nft.collection
+//     const collection = await sdkClient.api.getCollection(collectionSlug)
+//     const fees = collection.fees
+//     return extractFeesSdk(fees, priceWei)
+// }
 
 const getCriteriaFees = async (collectionSlug, priceWei) => {
     const response = await apiClient.get(`v2/collections/${collectionSlug}`)
@@ -147,43 +117,22 @@ const getBuildData = async (collectionSlug, quantity) => {
     return response.data.partialParameters
 }
 
-// const getCriteriaConsideration = async (
-//     criteriaFees,
-//     collectionSlug,
-//     priceWei,
-//   ) => {
-//     const fees = [
-//       ...criteriaFees,
-//       ...(await getCriteriaFees(collectionSlug, priceWei)),
-//     ]
-
-//     console.log('fees unfiltered from getCriteriaConsideration', fees);
-//     console.log('filtered fees from getCriteriaConsideration', fees.filter(fee => fee !== null));
-  
-//     return fees.filter(fee => fee !== null)
-// }
-
 const getCriteriaConsideration = async (
   criteriaFees,
   collectionSlug,
   priceWei,
 ) => {
-  // Fetch additional fees
   const additionalFees = await getCriteriaFees(collectionSlug, priceWei);
 
-  // Combine the arrays
   const allFees = [...criteriaFees, ...additionalFees];
 
-  // Use a Map to store unique fees based on their properties
   const uniqueFeesMap = new Map();
 
-  // Add fees to the Map
   allFees.forEach((fee) => {
-    const key = JSON.stringify(fee); // Use a unique key based on fee properties
+    const key = JSON.stringify(fee);
     uniqueFeesMap.set(key, fee);
   });
 
-  // Convert the Map values back to an array
   const uniqueFees = Array.from(uniqueFeesMap.values());
 
   return uniqueFees;
