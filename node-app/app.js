@@ -49,7 +49,7 @@ const fetchData = async (maxBid, minDifference, collectionSlug) => {
       console.log('No bid will be placed');
     }
 
-    fetchInterval = setInterval(() => fetchData(maxBid, minDifference, collectionSlug), 15 * 1000);
+    fetchInterval = setInterval(() => fetchData(maxBid, minDifference, collectionSlug), 60 * 15 * 1000);
   } catch (error) {
     console.error('Error combining data', error);
   }
