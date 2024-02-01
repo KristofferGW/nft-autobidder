@@ -17,7 +17,7 @@ const fetchData = async (maxBid, minDifference, collectionSlug) => {
   clearInterval(fetchInterval);
   fetchInterval = null;
   try {
-    sdk.auth('9d2673aea38642219bf60ddfd03e726a');
+    sdk.auth('YOUR OPENSEA API KEY HERE');
     sdk.server('https://api.opensea.io');
 
     const floorData = await sdk.get_best_listings_on_collection_v2({ limit: '1', collection_slug: collectionSlug });
