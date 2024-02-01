@@ -22,7 +22,7 @@ Mint an NFT from the collection you deployed to the address you want to use with
 Change directory to the frontend folder and install all dependencis by running "npm install" in the terminal. Change directory to node-app and install all dependencies for the backend as well.
 
 ### Step 6:
-Get an API-key from OpenSea and paste it in node-app/app.js on where it says YOUR-OPENSEA-API-KEY.
+Get an API-key from OpenSea and paste it in node-app/app.js where it says YOUR-OPENSEA-API-KEY.
 
 ### Step 7:
 Paste the private key of the wallet you want to use with the bot in the .env file. The private key should not be shared with anyone or published online!
